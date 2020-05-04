@@ -2,3 +2,9 @@
     ViewData["Title"] = "Home Page";
 }
 
+<environment names="Development">
+    <script src="~/lib/@@microsoft/signalr/dist/browser/signalr.js"></script>
+</environment>
+<environment names="Production">
+    <script src="~/lib/@@microsoft/signalr/dist/browser/signalr.min.js"></script>
+</environment>
