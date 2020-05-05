@@ -10,9 +10,16 @@ namespace MemeViewerSignalR.Web.Hubs
     public class MemeHub : Hub<IMemeHubClient>
     {
         private readonly string secretGroupName = "secret";
-        public async Task SendMeme(Meme meme)
+        public async Task SendMeme(Meme meme, bool onlySecret)
         {
-            await Clients.All.ReceiveMeme(meme);
+            if (onlySecret)
+            {
+                await Clients.Group(secretGroupName).ReceiveMeme(meme);
+            } else
+            {
+                await Clients.All.ReceiveMeme(meme);
+            }
+            
             //await Clients.All.SendAsync("ReceiveMeme", meme);
         }
 

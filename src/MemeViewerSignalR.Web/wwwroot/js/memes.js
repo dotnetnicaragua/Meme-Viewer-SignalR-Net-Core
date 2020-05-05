@@ -47,8 +47,9 @@
         var title = titleInput.val();
         var user = userInput.val();
         var imageLink = imageLinkInput.val();
+        var onlySecret = checkBoxSecret.prop('checked');
         if (title && user && imageLink) {
-            connection.invoke("SendMeme", { title, user, imageLink }).catch(function (error) {
+            connection.invoke("SendMeme", { title, user, imageLink }, onlySecret).catch(function (error) {
                 console.log(error);
             });
         }
