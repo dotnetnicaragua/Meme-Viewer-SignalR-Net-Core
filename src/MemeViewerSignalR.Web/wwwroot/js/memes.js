@@ -14,7 +14,7 @@
 
     var divAlertMessage = $('#alertMessage');
     var divMemesContainer = $('#memesContainer');
-
+    var secretGroupRow = $('#secretGroupRow');
     var connection = new signalR.HubConnectionBuilder()
         .withUrl("/memesHub")
         .build();
@@ -53,6 +53,28 @@
             });
         }
         
+    });
+
+    joinSecretBtn.on('click', function () {
+        connection.invoke('JoinSecretGroup').then(function () {
+            console.log("Joined secret group");
+            joinSecretBtn.hide();
+            leaveSecretBtn.show();
+            secretGroupRow.show();
+        }).catch(function (error) {
+            console.log(error);
+        });
+    });
+
+    leaveSecretBtn.on('click', function () {
+        connection.invoke('LeaveSecretGroup').then(function () {
+            console.log("Left secret group");
+            joinSecretBtn.show();
+            leaveSecretBtn.hide();
+            secretGroupRow.hide();
+        }).catch(function (error) {
+            console.log(error);
+        });
     });
 
     //Helper functions
