@@ -29,6 +29,9 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+src/*/[Bb]in/
+src/*/[Oo]bj/
+src/*/[Ll]og/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -431,3 +434,7 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+src/MemeViewerSignalR.Web/obj/project.assets.json
+*.targets
+*.props
+src/MemeViewerSignalR.Web/obj/MemeViewerSignalR.Web.csproj.nuget.g.props

@@ -1,7 +1,55 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Meme Viewer";
 }
 
+    <div class="container">
+        <div class="alert alert-info" id="alertMessage" style="display:none">
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="col-2">User</div>
+            <div class="col-8"><input type="text" class="form-control" id="userInput" /></div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="col-2">Title</div>
+            <div class="col-8"><input type="text" class="form-control" id="titleInput" /></div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="col-2">ImageLink</div>
+            <div class="col-8"><input type="text" class="form-control" id="imageLinkInput" /></div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div id="secretGroupRow" style="display:none" class="row">
+            <div class="col-2">Only to secret group</div>
+            <div class="col-8"><input type="checkbox" class="form-control" id="checkBoxSecret" /></div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="col-3">
+                <input type="button" class="btn btn-outline-dark" id="sendButton" value="Send Meme" />
+            </div>
+            <div class="col-3">
+                <input type="button" class="btn btn-outline-dark"  id="joinSecretButton" value="Join Secret Group" />
+            </div>
+            <div class="col-3">
+                <input type="button" class="btn btn-outline-dark" style="display:none" id="leaveSecretButton" value="Leave Secret Group" />
+            </div>
+            <div class="col-3">
+                <input type="button" class="btn btn-outline-danger" style="display:none" id="reconnectButton" value="Reconnect" />
+            </div>
+
+        </div>
+    </div>
+<div class="row">
+    <div class="col-12">
+        <hr />
+    </div>
+</div>
+<div id="memesContainer">
+
+</div>
 <environment names="Development">
     <script src="~/lib/@@microsoft/signalr/dist/browser/signalr.js"></script>
 </environment>
