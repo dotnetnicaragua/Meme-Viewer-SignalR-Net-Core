@@ -21,7 +21,8 @@
 
     //Signal R Client Hub Actions
     connection.on('ReceiveMeme', function (meme) {
-        console.log(meme);
+        drawMeme(meme);
+        clearForm();
     });
 
 
@@ -46,10 +47,63 @@
         var title = titleInput.val();
         var user = userInput.val();
         var imageLink = imageLinkInput.val();
-        connection.invoke("SendMeme", { title, user, imageLink }).catch(function (error) {
-            console.log(error);
-        });
+        if (title && user && imageLink) {
+            connection.invoke("SendMeme", { title, user, imageLink }).catch(function (error) {
+                console.log(error);
+            });
+        }
+        
     });
+
+    //Helper functions
+    function drawMeme(meme) {
+
+        var titleEncoded = meme.title.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+        var cardContainer = document.createElement("div");
+        cardContainer.className = "card";
+
+        var cardHeader = document.createElement("div");
+        cardHeader.className = "card-header";
+        var cardTitle = document.createElement("h3");
+        cardTitle.textContent = titleEncoded;
+
+        cardHeader.appendChild(cardTitle);
+
+        var cardBody = document.createElement("div");
+        cardBody.className = "card-body";
+
+        var cardBodyCreatedBy = document.createElement("h5");
+        cardBodyCreatedBy.textContent = "Created by " + meme.user;
+
+        cardBody.appendChild(cardBodyCreatedBy);
+
+
+        var cardImage = document.createElement("img");
+        cardImage.src = meme.imageLink;
+        cardImage.className = "card-img-top spacing"
+
+        var cardImgContainer = document.createElement("div");
+        cardImgContainer.style = "text-align:center";
+        cardImgContainer.appendChild(cardImage);
+
+        cardContainer.appendChild(cardHeader);
+        cardContainer.appendChild(cardBody);
+        cardContainer.appendChild(cardImgContainer);
+
+        var wholeItemContainer = document.createElement("div");
+        wholeItemContainer.className = "col-6 spacing";
+        wholeItemContainer.appendChild(cardContainer);
+
+        divMemesContainer.prepend(wholeItemContainer);
+    }
+
+    function clearForm() {
+        titleInput.val('');
+        imageLinkInput.val('');
+        userInput.val('');
+        checkBoxSecret.prop('checked', false);
+    }
 
     startConnection();
 
