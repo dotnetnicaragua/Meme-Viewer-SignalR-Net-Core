@@ -26,15 +26,21 @@
     //Life cycle events
     connection.onreconnected(function (connectionId) {
         initButtons();
+
+        displayMessage('Connected successfully. New Connection Id: ' + connectionId);
     });
 
     connection.onreconnecting(function () {
+
+        displayMessage('Connection lost, attempting to reconnect');
         resetButtons();
         secretGroupRow.hide();
     });
 
     //Definitely disconnected after all attempts for reconnection
     connection.onclose(function () {
+
+        displayMessage('Connection closed after all reconnects. Please press the reconnect button to manually connect');
         reconnectBtn.show();
     });
 
@@ -49,8 +55,11 @@
         secretGroupRow.hide();
         connection.start().then(function () {
             initButtons();
+            displayMessage('Connected successfully');
         }).catch(function (err) {
             reconnectBtn.show();
+
+            displayMessage('An error ocurred trying to connect to the server');
             return console.error(err.toString());
         });
     }
@@ -160,6 +169,11 @@
     function initButtons() {
         sendMemeBtn.prop('disabled', false);
         joinSecretBtn.prop('disabled', false);
+    }
+
+    function displayMessage(message) {
+        divAlertMessage.show();
+        divAlertMessage.html(message);
     }
 
     startConnection();
