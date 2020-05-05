@@ -19,6 +19,12 @@
         .withUrl("/memesHub")
         .build();
 
+    //Signal R Client Hub Actions
+    connection.on('ReceiveMeme', function (meme) {
+        console.log(meme);
+    });
+
+
     //Disable send button until connection is established
     sendMemeBtn.prop('disabled', true);
 
@@ -40,7 +46,9 @@
         var title = titleInput.val();
         var user = userInput.val();
         var imageLink = imageLinkInput.val();
-        connection.invoke("SendMeme", {title, user, imageLink});
+        connection.invoke("SendMeme", { title, user, imageLink }).catch(function (error) {
+            console.log(error);
+        });
     });
 
     startConnection();
