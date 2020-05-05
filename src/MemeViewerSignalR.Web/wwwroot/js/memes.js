@@ -1,21 +1,48 @@
-﻿"use strict";
+﻿$(function () {
 
-var connection = new signalR.HubConnectionBuilder()
-    .withUrl("/memesHub")
-    .build();
+    "use strict";
+    //UI elements
+    var userInput = $('#userInput');
+    var titleInput = $('#titleInput');
+    var imageLinkInput = $('#imageLinkInput');
+    var checkBoxSecret = $('#checkBoxSecret');
 
-//Disable send button until connection is established
-document.getElementById("sendButton").disabled = true;
+    var sendMemeBtn = $('#sendButton');
+    var joinSecretBtn = $('#joinSecretButton');
+    var leaveSecretBtn = $('#leaveSecretButton');
+    var reconnectBtn = $('#reconnectBtn');
+
+    var divAlertMessage = $('#alertMessage');
+    var divMemesContainer = $('#memesContainer');
+
+    var connection = new signalR.HubConnectionBuilder()
+        .withUrl("/memesHub")
+        .build();
+
+    //Disable send button until connection is established
+    sendMemeBtn.prop('disabled', true);
 
 
 
-function startConnection() {
-    connection.start().then(function () {
-        document.getElementById("sendButton").disabled = false;
-        console.log('connected');
-    }).catch(function (err) {
-        return console.error(err.toString());
+    function startConnection() {
+        connection.start().then(function () {
+            sendMemeBtn.prop('disabled', false);
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+    }
+
+
+
+    //Listeners
+    sendMemeBtn.on('click', function () {
+        //Send meme to signal r server
+        var title = titleInput.val();
+        var user = userInput.val();
+        var imageLink = imageLinkInput.val();
+        connection.invoke("SendMeme", {title, user, imageLink});
     });
-}
 
-startConnection();
+    startConnection();
+
+})
