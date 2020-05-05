@@ -25,16 +25,16 @@
 
     //Life cycle events
     connection.onreconnected(function (connectionId) {
-        console.log(connectionId);
+        initButtons();
     });
 
     connection.onreconnecting(function () {
-        console.log('attempting to reconnect');
+        resetButtons();
+        secretGroupRow.hide();
     });
 
     //Definitely disconnected after all attempts for reconnection
     connection.onclose(function () {
-        console.log('just closed');
         reconnectBtn.show();
     });
 
@@ -44,17 +44,11 @@
         clearForm();
     });
 
-
-
-    //Disable send button until connection is established
-    sendMemeBtn.prop('disabled', true);
-
-
-
     function startConnection() {
+        resetButtons();
+        secretGroupRow.hide();
         connection.start().then(function () {
-            reconnectBtn.hide();
-            sendMemeBtn.prop('disabled', false);
+            initButtons();
         }).catch(function (err) {
             reconnectBtn.show();
             return console.error(err.toString());
@@ -99,6 +93,10 @@
             console.log(error);
         });
     });
+
+    reconnectBtn.on('click', function () {
+        startConnection();
+    })
 
     //Helper functions
     function drawMeme(meme) {
@@ -148,6 +146,20 @@
         imageLinkInput.val('');
         userInput.val('');
         checkBoxSecret.prop('checked', false);
+    }
+
+    function resetButtons() {
+        //After a disconnect
+        sendMemeBtn.prop('disabled', true);
+        joinSecretBtn.show();
+        joinSecretBtn.prop('disabled', true);
+        leaveSecretBtn.hide();
+        reconnectBtn.hide();
+    }
+    //After connection is stablished
+    function initButtons() {
+        sendMemeBtn.prop('disabled', false);
+        joinSecretBtn.prop('disabled', false);
     }
 
     startConnection();
