@@ -10,20 +10,40 @@
     var sendMemeBtn = $('#sendButton');
     var joinSecretBtn = $('#joinSecretButton');
     var leaveSecretBtn = $('#leaveSecretButton');
-    var reconnectBtn = $('#reconnectBtn');
+    var reconnectBtn = $('#reconnectButton');
 
     var divAlertMessage = $('#alertMessage');
     var divMemesContainer = $('#memesContainer');
     var secretGroupRow = $('#secretGroupRow');
+
+    //Signal R instance
     var connection = new signalR.HubConnectionBuilder()
         .withUrl("/memesHub")
+        //Default values [0,2,10, 30]
+        .withAutomaticReconnect([0, 0, 0, 0])
         .build();
+
+    //Life cycle events
+    connection.onreconnected(function (connectionId) {
+        console.log(connectionId);
+    });
+
+    connection.onreconnecting(function () {
+        console.log('attempting to reconnect');
+    });
+
+    //Definitely disconnected after all attempts for reconnection
+    connection.onclose(function () {
+        console.log('just closed');
+        reconnectBtn.show();
+    });
 
     //Signal R Client Hub Actions
     connection.on('ReceiveMeme', function (meme) {
         drawMeme(meme);
         clearForm();
     });
+
 
 
     //Disable send button until connection is established
@@ -33,8 +53,10 @@
 
     function startConnection() {
         connection.start().then(function () {
+            reconnectBtn.hide();
             sendMemeBtn.prop('disabled', false);
         }).catch(function (err) {
+            reconnectBtn.show();
             return console.error(err.toString());
         });
     }
