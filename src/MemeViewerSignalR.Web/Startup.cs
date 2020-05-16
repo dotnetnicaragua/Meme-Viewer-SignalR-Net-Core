@@ -24,7 +24,16 @@ namespace MemeViewerSignalR.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSignalR();
+            //If the config is empty or not set, then just configure it self hosted, so that way by default it works this way and optionally configure it with Azure Signal R Service
+            if (string.IsNullOrEmpty(Configuration.GetValue<string>("Azure:SignalR:ConnectionString"))) {
+                services.AddSignalR();
+            } else
+            {
+                services.AddSignalR()
+                    //This looks for the Configuration "Azure:SignalR:ConnectionString", you can also use overrides to pass the connection string directly or an Action object to configure it
+                    .AddAzureSignalR();
+            }
+
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
         }
